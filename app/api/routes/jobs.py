@@ -144,6 +144,7 @@ async def cancel_job(
             )
 
         job.status = "cancelled"
+        job.updated_at = datetime.now(timezone.utc)
         await db.commit()
         await db.refresh(job)
 
@@ -181,6 +182,7 @@ async def retry_job(
         job.attempts = 0
         job.error = None
         job.result = None
+        job.updated_at = datetime.now(timezone.utc)
         await db.commit()
         await db.refresh(job)
 

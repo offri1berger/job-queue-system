@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import time
+import uuid
 from datetime import datetime, timezone
 from typing import Callable
 
@@ -38,7 +39,7 @@ async def promote_scheduled_loop(shutdown_flag: Callable[[], bool]) -> None:
                     result = await db.execute(
                         update(Job)
                         .where(
-                            Job.id == job_id_str,
+                            Job.id == uuid.UUID(job_id_str),
                             Job.status == "scheduled",
                         )
                         .values(status="pending", updated_at=now)
