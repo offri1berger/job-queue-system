@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+sqlalchemy[asyncio]
+asyncpg
+alembic
+pydantic-settings
+pydantic[email]
+redis[hiredis]
+httpx
+pytest
+pytest-asyncio
+python-ulid
+uuid
