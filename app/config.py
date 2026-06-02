@@ -23,6 +23,8 @@ class Settings(BaseSettings):
     MONITOR_INTERVAL_SECONDS: int = 60
     ORPHAN_INTERVAL_SECONDS: int = 300
 
+    FORCE_WEBHOOK_FAIL: bool = False
+
     class Config:
         env_file = ".env"
         extra = "ignore"
