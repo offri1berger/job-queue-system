@@ -7,6 +7,7 @@ from redis.asyncio import Redis
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.queue_score import calculate_queue_score
 from app.database import get_db
 from app.models.job import Job
 from app.redis_client import get_redis
@@ -56,7 +57,7 @@ async def create_job(
 
         job_id_str = str(job.id)
         if status == "pending":
-            await redis.zadd(JOBS_QUEUE, {job_id_str: body.priority})
+            await redis.zadd(JOBS_QUEUE, {job_id_str: calculate_queue_score(job.priority, job.created_at)})
         else:
             await redis.zadd(JOBS_SCHEDULED, {job_id_str: run_at.timestamp()})
 
@@ -183,7 +184,7 @@ async def retry_job(
         await db.commit()
         await db.refresh(job)
 
-        await redis.zadd(JOBS_QUEUE, {str(job.id): job.priority})
+        await redis.zadd(JOBS_QUEUE, {str(job.id): calculate_queue_score(job.priority, job.created_at)})
 
         return JobResponse.model_validate(job)
 
