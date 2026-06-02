@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from app.api.routes.jobs import router as jobs_router
 from app.database import create_tables
 from app.redis_client import connect, disconnect
 
@@ -16,13 +17,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-# from app.api.routes.jobs import router as jobs_router
-# app.include_router(jobs_router, prefix="/jobs")
-
-
-@app.get("/health")
-async def health():
-    return {"status": "ok"}
+app.include_router(jobs_router)
 
 
 if __name__ == "__main__":

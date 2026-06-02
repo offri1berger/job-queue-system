@@ -57,5 +57,6 @@ class JobListResponse(BaseModel):
 class HealthResponse(BaseModel):
     status: str
     queue_size: int
+    scheduled_size: int
     pending_jobs: int
     processing_jobs: int
